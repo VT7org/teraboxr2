@@ -17,7 +17,7 @@ from get_link import post
 from db import *
 import string
 from tools import *
-from config import API_ID, API_HASH, BOT_TOKEN, MONGO_DB_URL, DB_NAME, PRIVATE_CHAT_ID
+from config import BOT_TOKEN
 import subprocess
 from download import download_file
 import aiohttp

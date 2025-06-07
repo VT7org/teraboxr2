@@ -11,7 +11,7 @@ settings_collection = bc["settings"]
 message_deletion_collection = bc["message_deletion"]
 
 # Initialize Telegram client
-bot = TelegramClient('bot', api_id=API_ID, api_hash=API_HASH).start(bot_token=BOT_TOKEN)  # Updated
+bot = TelegramClient('bot_autodel', api_id=API_ID, api_hash=API_HASH).start(bot_token=BOT_TOKEN)  # Updated
 
 # Default deletion time (5 minutes in seconds)
 DEFAULT_DELETION_TIME = 5 * 60

@@ -17,12 +17,8 @@ from get_link import post
 from db import *
 import string
 from tools import *
-from config import BOT_TOKEN
-import os
-import time
+from config import API_ID, API_HASH, BOT_TOKEN, MONGO_DB_URL, DB_NAME, PRIVATE_CHAT_ID
 import subprocess
-from uuid import uuid4
-from telethon.tl.functions.messages import ForwardMessagesRequest
 from download import download_file
 import aiohttp
 import io
@@ -31,6 +27,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from telethon.errors import UserBlockedError, UserDeactivatedError
 from block import is_blocked
 from func import *
+from autodel import schedule_message_deletion  # Import for auto-delete
 
 MAX_RETRIES = 3
 
@@ -52,6 +49,9 @@ premium_users_collection = bc["premium_users"]
 file_cache_collection = bc["file_cache"]
 gift_codes_collection = bc["gift_codes"]
 counters_collection = bc["counters"]
+message_deletion_collection = bc["message_deletion"]  # Added for auto-delete
+
+bot = TelegramClient('bot', api_id=API_ID, api_hash=API_HASH)  # Replace with your API ID and hash
 
 @bot.on(events.NewMessage(pattern="/ads (on|off)", incoming=True))
 async def toggle_ads_verification(event):
@@ -115,7 +115,7 @@ async def start_command(event):
 
     if await ads_verification_required(user_id):
         await event.respond(
-            "Please join  both Groups and channels before using the bot,👨‍💻 Beaware ! if you leave after using the bot you may banned from using the bot as well as on channel and groups also.",
+            "Please join both Groups and channels before using the bot, 👨‍💻 Be aware! If you leave after using the bot you may be banned from using the bot as well as on channel and groups also.",
             buttons=[
                 [Button.url("Join 1💚", f"https://t.me/{CHANNEL_SUPPORT}")],
                 [Button.url("Join 2💚", f"https://t.me/{CHANNEL_UPDATE}")],
@@ -128,10 +128,10 @@ async def start_command(event):
 
     if join_support and join_update:
         await event.respond(
-            "Please join both Groups and channels to use this bot, Don't be get too smart you will be blocked from bot as well as our community after leaving the following group & channel.",
+            "Please join both Groups and channels to use this bot, Don't be too smart you will be blocked from bot as well as our community after leaving the following group & channel.",
             buttons=[
                 [Button.url("Join Group", f"https://t.me/{CHANNEL_SUPPORT}")],
-                [Button.url("Join Channel", f"https://t.me/{CHANNEL_UPDATE}")],
+                [Button.url("Join Channel", f"https://t.me/{CHANNEL_UPDATE}")]
             ]
         )
     elif join_support:
@@ -153,8 +153,8 @@ async def start_command(event):
         caption = (
             "𝐇ᴇʟʟᴏ ! 𝐈 ᴀᴍ ᴛᴇʀʙᴏx ᐯIᗪᗴO 𝐃ᴏᴡɴʟᴏᴀᴅᴇʀ ʙᴏᴛ.\n\n"
             "ᴊᴜsᴛ ᴘᴀsᴛᴇ ᴛᴇʀᴀʙᴏx ʟɪɴᴋ ᴅɪʀᴇᴛʟʏ ᴛʜᴇʀᴇ & ɪ ᴡɪʟʟ sʜᴀʀᴇ ᴅɪʀᴇᴄᴛ ᴠɪᴅᴇᴏ ᴛᴏ ʏᴏᴜ.\n\n"
-            "ᴛʜᴇʀᴇ ɪs ᴏɴʟʏ ғᴇᴡ ᴅᴏᴡɴʟᴏᴀᴅs ᴀʀᴇ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴏʀ ғʀᴇᴇ ᴜsᴇʀs ᴋɪɴᴅʟʏ sᴜʙsᴄʀɪʙᴇ ᴍʏ ᴄʜᴇᴘᴇsᴛ sᴜʙsᴄʀɪᴘᴛɪᴏɴ ᴏɴ ᴛɢ ᴛᴏ ᴅᴏɴᴡʟᴏᴀᴅ ᴜɴʟɪᴍɪᴛᴇᴅ ᴠɪᴅᴇᴏs.\n\n"
-            "ᴄᴏɴᴛᴄᴛ ᴍʏ ᴏᴡɴᴇʀ ᴀᴛ @teraboxsells ᴛᴏ ɢᴇᴛ ᴘʀᴇᴍɪᴜᴍ ᴀᴄᴄᴇss ᴏғ ʙᴏᴛs.\n\n"
+            "ᴛʜᴇʀᴇ ɪs ᴏɴʟʏ ғᴇᴡ ᴅᴏᴡɴʟᴏᴀᴅs ᴀʀᴇ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴏʀ ғʀᴇᴇ ᴜsᴇʀs ᴋɪɴᴅʟʏ sᴜʙsᴄʀɪʙᴇ ᴍʏ ᴄʜᴇᴀᴘᴇsᴛ sᴜʙsᴄʀɪᴘᴛɪᴏɴ ᴏɴ ᴛɢ ᴛᴏ ᴅᴏɴᴡʟᴏᴀᴅ ᴜɴʟɪᴍɪᴛᴇᴅ ᴠɪᴅᴇᴏs.\n\n"
+            "ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴏᴡɴᴇʀ ᴀᴛ @teraboxsells ᴛᴏ ɢᴇᴛ ᴘʀᴇᴍɪᴜᴍ ᴀᴄᴄᴇss ᴏғ ʙᴏᴛs.\n\n"
         )
         await bot.send_file(event.chat_id, file=img_url, caption=caption, buttons=reply_markup)
 
@@ -176,18 +176,21 @@ async def start(m: UpdateNewMessage):
     fileid = file_doc["file_id"] if file_doc else None
 
     if fileid:
-        await bot(
+        forwarded_message = await bot(
             ForwardMessagesRequest(
                 from_peer=PRIVATE_CHAT_ID,
                 id=[int(fileid)],
                 to_peer=m.chat.id,
                 drop_author=True,
-                noforwards=False,
+                noforwards=True,  # Disable forwarding
                 background=True,
                 drop_media_captions=False,
                 with_my_score=True,
             )
         )
+        # Schedule deletion of the forwarded message
+        if forwarded_message:
+            await schedule_message_deletion(m.chat.id, forwarded_message[0].id, m.sender_id)
 
 all = string.ascii_letters + string.digits + '_'
 def generate_token(length: int) -> str:
@@ -276,18 +279,21 @@ async def handle_message(event, channel1=CHANNEL_UPDATE, channel2=CHANNEL_SUPPOR
         except:
             pass
 
-        await bot(
+        forwarded_message = await bot(
             ForwardMessagesRequest(
                 from_peer=PRIVATE_CHAT_ID,
                 id=[int(fileid)],
                 to_peer=m.chat.id,
                 drop_author=True,
-                noforwards=False,
+                noforwards=True,  # Disable forwarding
                 background=True,
                 drop_media_captions=False,
                 with_my_score=True,
             )
         )
+        # Schedule deletion of the forwarded message
+        if forwarded_message:
+            await schedule_message_deletion(m.chat.id, forwarded_message[0].id, sender_id)
         return
 
     await counters_collection.update_one(
@@ -298,7 +304,7 @@ async def handle_message(event, channel1=CHANNEL_UPDATE, channel2=CHANNEL_SUPPOR
 
     data = await get_data(url)
     if not data:
-        return await hm.edit("Sorry! your link is broken.")
+        return await hm.edit("Sorry! May be My Servers are Too Busy or Your link is broken kindly share valid terabox media link to download.")
 
     start_download_time = time.time()
     cansend = CanSend()
@@ -460,19 +466,22 @@ async def handle_message(event, channel1=CHANNEL_UPDATE, channel2=CHANNEL_SUPPOR
             upsert=True
         )
 
-        await bot(
+        forwarded_message = await bot(
             ForwardMessagesRequest(
                 from_peer=PRIVATE_CHAT_ID,
                 id=[file.id],
                 to_peer=m.chat.id,
                 top_msg_id=m.id,
                 drop_author=True,
-                noforwards=False,
+                noforwards=True,  # Disable forwarding
                 background=True,
                 drop_media_captions=False,
                 with_my_score=True,
             )
         )
+        # Schedule deletion of the forwarded message
+        if forwarded_message:
+            await schedule_message_deletion(m.chat.id, forwarded_message[0].id, sender_id)
 
 @bot.on(events.NewMessage(pattern='/stats', incoming=True))
 async def stats_command(event):
@@ -620,11 +629,15 @@ async def setup_indexes():
     await gift_codes_collection.create_index("_id")
     await counters_collection.create_index("_id")
     await settings_collection.create_index("_id")
+    await message_deletion_collection.create_index("_id")
     await db.tokens.create_index("user_id")
     await db.verify.create_index("user_id")
 
-asyncio.run(setup_indexes())
+async def main():
+    await setup_indexes()
+    await bot.start(bot_token=BOT_TOKEN)
+    print('ᴀᴘᴇx ᴛᴇʀᴀʙᴏx-ᴠ2 ᴅᴇᴘʟᴏʏᴇᴅ sᴜᴄᴇssғᴜʟʟʏ 💚')
+    await bot.run_until_disconnected()
 
-bot.start(bot_token=BOT_TOKEN)
-print('ᴀᴘᴇx ᴛᴇʀʙᴏx ᴅᴇᴘʟᴏʏᴇᴅ sᴜᴄᴇssғᴜʟʟʏ 💚')
-bot.run_until_disconnected()
+if __name__ == '__main__':
+    asyncio.run(main())

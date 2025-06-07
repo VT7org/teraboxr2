@@ -627,4 +627,4 @@ asyncio.run(setup_indexes())
 
 bot.start(bot_token=BOT_TOKEN)
 print('ᴀᴘᴇx ᴛᴇʀʙᴏx ᴅᴇᴘʟᴏʏᴇᴅ sᴜᴄᴇssғᴜʟʟʏ 💚')
-bot.run_until_disconnected())
+bot.run_until_disconnected()

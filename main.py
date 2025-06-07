@@ -115,10 +115,10 @@ async def start_command(event):
 
     if await ads_verification_required(user_id):
         await event.respond(
-            "Please join both support and update channels before using the bot.",
+            "Please join  both Groups and channels before using the bot,👨‍💻 Beaware ! if you leave after using the bot you may banned from using the bot as well as on channel and groups also.",
             buttons=[
-                [Button.url("Join Support", f"https://t.me/{CHANNEL_SUPPORT}")],
-                [Button.url("Join Update", f"https://t.me/{CHANNEL_UPDATE}")],
+                [Button.url("Join 1💚", f"https://t.me/{CHANNEL_SUPPORT}")],
+                [Button.url("Join 2💚", f"https://t.me/{CHANNEL_UPDATE}")],
             ]
         )
         return
@@ -128,10 +128,10 @@ async def start_command(event):
 
     if join_support and join_update:
         await event.respond(
-            "Please join both support and update channels before using the bot.",
+            "Please join both Groups and channels to use this bot, Don't be get too smart you will be blocked from bot as well as our community after leaving the following group & channel.",
             buttons=[
-                [Button.url("Join Support", f"https://t.me/{CHANNEL_SUPPORT}")],
-                [Button.url("Join Update", f"https://t.me/{CHANNEL_UPDATE}")],
+                [Button.url("Join Group", f"https://t.me/{CHANNEL_SUPPORT}")],
+                [Button.url("Join Channel", f"https://t.me/{CHANNEL_UPDATE}")],
             ]
         )
     elif join_support:
@@ -394,7 +394,7 @@ async def handle_message(event, channel1=CHANNEL_UPDATE, channel2=CHANNEL_SUPPOR
 **Uploaded in**: `{convert_seconds(time.time() - start_upload_time)}`
 **Uploaded by**: {sender_id}
 
-**Join @BillaSpace**
+**Join @Avenger_flix**
 """,
             supports_streaming=True,
             spoiler=True,
@@ -421,7 +421,7 @@ async def handle_message(event, channel1=CHANNEL_UPDATE, channel2=CHANNEL_SUPPOR
 **Uploaded in**: `{convert_seconds(time.time() - start_upload_time)}`
 **Uploaded by**: {sender_id}
 
-**Join @BillaSpace**
+**Join @Avenger_flix**
 """,
             progress_callback=progress_bar,
             thumb=thumbnail if thumbnail else None,

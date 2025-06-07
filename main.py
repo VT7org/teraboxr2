@@ -151,8 +151,10 @@ async def start_command(event):
         ]
         img_url = "https://graph.org/file/41421ca12a57a331f1756.jpg"
         caption = (
-            "𝐇𝐞𝐥𝐥𝐨! 𝐈 𝐚𝐦 𝐓𝐞𝐫𝐚𝐛𝐨𝐱 𝐕𝐢𝐝𝐞𝐨 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐞𝐫 𝐁𝐨𝐭.\n\n"
-            "𝐒𝐞𝐧𝐝 𝐦𝐞 𝐭𝐞𝐫𝐚𝐛𝐨𝐱 𝐯𝐢𝐤 𝐥𝐢𝐧𝐤 & 𝐈 𝐰𝐢𝐥𝐥 𝐬𝐞𝐧𝐝 𝐕𝐢𝐝𝐞𝐨.\n\n"
+            "𝐇ᴇʟʟᴏ ! 𝐈 ᴀᴍ ᴛᴇʀʙᴏx ᐯIᗪᗴO 𝐃ᴏᴡɴʟᴏᴀᴅᴇʀ ʙᴏᴛ.\n\n"
+            "ᴊᴜsᴛ ᴘᴀsᴛᴇ ᴛᴇʀᴀʙᴏx ʟɪɴᴋ ᴅɪʀᴇᴛʟʏ ᴛʜᴇʀᴇ & ɪ ᴡɪʟʟ sʜᴀʀᴇ ᴅɪʀᴇᴄᴛ ᴠɪᴅᴇᴏ ᴛᴏ ʏᴏᴜ.\n\n"
+            "ᴛʜᴇʀᴇ ɪs ᴏɴʟʏ ғᴇᴡ ᴅᴏᴡɴʟᴏᴀᴅs ᴀʀᴇ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴏʀ ғʀᴇᴇ ᴜsᴇʀs ᴋɪɴᴅʟʏ sᴜʙsᴄʀɪʙᴇ ᴍʏ ᴄʜᴇᴘᴇsᴛ sᴜʙsᴄʀɪᴘᴛɪᴏɴ ᴏɴ ᴛɢ ᴛᴏ ᴅᴏɴᴡʟᴏᴀᴅ ᴜɴʟɪᴍɪᴛᴇᴅ ᴠɪᴅᴇᴏs.\n\n"
+            "ᴄᴏɴᴛᴄᴛ ᴍʏ ᴏᴡɴᴇʀ ᴀᴛ @teraboxsells ᴛᴏ ɢᴇᴛ ᴘʀᴇᴍɪᴜᴍ ᴀᴄᴄᴇss ᴏғ ʙᴏᴛs.\n\n"
         )
         await bot.send_file(event.chat_id, file=img_url, caption=caption, buttons=reply_markup)
 

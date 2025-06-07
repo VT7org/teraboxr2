@@ -51,7 +51,7 @@ gift_codes_collection = bc["gift_codes"]
 counters_collection = bc["counters"]
 message_deletion_collection = bc["message_deletion"]  # Added for auto-delete
 
-bot = TelegramClient('bot', api_id=API_ID, api_hash=API_HASH)  # Replace with your API ID and hash
+bot = TelegramClient('bot_main', api_id=API_ID, api_hash=API_HASH)  # Replace with your API ID and hash
 
 @bot.on(events.NewMessage(pattern="/ads (on|off)", incoming=True))
 async def toggle_ads_verification(event):

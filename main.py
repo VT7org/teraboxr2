@@ -611,6 +611,18 @@ async def show_pr_users(event):
     users_list = "\n".join(str(user_id) for user_id in pr_users)
     await event.reply(f"Premium users:\n{users_list}")
 
+async def setup_indexes():
+    await user_tokens_collection.create_index("user_id")
+    await premium_users_collection.create_index("user_id")
+    await file_cache_collection.create_index("_id")
+    await gift_codes_collection.create_index("_id")
+    await counters_collection.create_index("_id")
+    await settings_collection.create_index("_id")
+    await db.tokens.create_index("user_id")
+    await db.verify.create_index("user_id")
+
+asyncio.run(setup_indexes())
+
 bot.start(bot_token=BOT_TOKEN)
-print('bot started ')
-bot.run_until_disconnected()
+print('ᴀᴘᴇx ᴛᴇʀʙᴏx ᴅᴇᴘʟᴏʏᴇᴅ sᴜᴄᴇssғᴜʟʟʏ 💚')
+bot.run_until_disconnected())
